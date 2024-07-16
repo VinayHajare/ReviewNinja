@@ -1,0 +1,6 @@
+llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+huggingface_hub==0.23.4
+scikit-build-core
+llama-cpp-agent>=0.2.35
+streamlit>=1.28
+streamlit-feedback
