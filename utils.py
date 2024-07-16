@@ -1,3 +1,5 @@
+import re
+import os
 import streamlit as st
 from llama_cpp import Llama
 from llama_cpp_agent import LlamaCppAgent
@@ -8,12 +10,30 @@ from huggingface_hub import hf_hub_download
 llm = None
 llm_model = ""
 
-hf_hub_download(
-    repo_id="VinayHajare/Meta-Llama-3-8B-Instruct-GGUF-v2",
-    filename="Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf",
-    local_dir="./models"
-)
+def is_file_in_models_directory(file_name: str, models_directory: str = "models") -> bool:
+    """
+    Checks if the given file is present in the models directory.
 
+    Args:
+        file_name (str): The name of the file to check.
+        models_directory (str): The path to the models directory. Default is "models".
+
+    Returns:
+        bool: True if the file is present, False otherwise.
+    """
+    # Construct the full path to the file
+    file_path = os.path.join(models_directory, file_name)
+    
+    # Check if the file exists at the specified path
+    return os.path.isfile(file_path)
+
+
+if is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf", "models"):
+    hf_hub_download(
+        repo_id="VinayHajare/Meta-Llama-3-8B-Instruct-GGUF-v2",
+        filename="Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf",
+        local_dir="./models"
+    )
 
 def get_context_by_model(model_name: str):
     model_context = {
@@ -64,6 +84,14 @@ def load_model(model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf"):
         )
 
 
+def remove_tags(text):
+    # Define a regular expression pattern to match tags like <scratchpad>, <principle_analysis_1>, etc.
+    pattern = r'<[^>]+>'
+    # Substitute all occurrences of the pattern with an empty string
+    cleaned_text = re.sub(pattern, '', text)
+    # Return the cleaned text
+    return cleaned_text.strip()
+
 def analyze(
         message: str,
         model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf",
@@ -92,6 +120,8 @@ def analyze(
         debug_output=True
     )
 
+    # Collect the entire output from the stream
+    code_analysis = ""
     code_analysis_stream = agent.get_chat_response(
         f"""Your task is to analyze a provided code snippet based on 10 good coding principles and create a report on the code quality.
         The 10 principles are:
@@ -127,15 +157,17 @@ def analyze(
         print_output=False
     )
 
-    outputs = ""
-    code_analysis = ""
     for output in code_analysis_stream:
         code_analysis += output
-        outputs += output
-        yield output
 
-    st.session_state.messages.append({"role": "assistant", "content": code_analysis, "type": "analysis"})
-    st.session_state.analysis_result = code_analysis
+    # Clean the collected output
+    cleaned_code_analysis = remove_tags(code_analysis)
+
+    # Stream the cleaned output
+    yield cleaned_code_analysis
+
+    st.session_state.messages.append({"role": "assistant", "content": cleaned_code_analysis, "type": "analysis"})
+    st.session_state.analysis_result = cleaned_code_analysis
 
     agent.system_prompt = "You are a refactoring expert"
     refactoring_suggestions_stream = agent.get_chat_response(
@@ -147,7 +179,7 @@ def analyze(
         And here is an analysis of the code:
 
         <code_analysis>
-        {code_analysis}
+        {cleaned_code_analysis}
         </code_analysis>
 
         Please carefully review the provided code and analysis. In a <scratchpad> section, think through how the code could potentially be refactored to improve its structure, readability, and maintainability. Consider things like:
@@ -169,8 +201,12 @@ def analyze(
     refactoring_suggestions = ""
     for output in refactoring_suggestions_stream:
         refactoring_suggestions += output
-    st.session_state.messages.append({"role": "assistant", "content": refactoring_suggestions, "type": "refactored"})
-    st.session_state.refactored_code = refactoring_suggestions
+
+    cleaned_refactoring_suggestions = remove_tags(refactoring_suggestions)
+
+
+    st.session_state.messages.append({"role": "assistant", "content": cleaned_refactoring_suggestions, "type": "refactored"})
+    st.session_state.refactored_code = cleaned_refactoring_suggestions
 
     agent.system_prompt = "You are the code review moderator"
 
@@ -178,11 +214,11 @@ def analyze(
         f"""You will be summarizing the key findings and recommendations from a code review process. Your goal is to provide an overall assessment of the code quality and suggest next steps for the developer based on the code analysis results and refactoring suggestions provided.
             First, include the code analysis results in a <code_analysis> section, like this:
             <code_analysis>
-            {code_analysis}
+            {cleaned_code_analysis}
             </code_analysis>
             Next, include the refactoring suggestions in a <refactoring_suggestions> section:
             <refactoring_suggestions>
-            {refactoring_suggestions} 
+            {cleaned_refactoring_suggestions} 
             </refactoring_suggestions>
             Then, think through your overall assessment of the code quality and what the next steps for the developer should be based on the code analysis and refactoring suggestions. Write out your thought process in a <scratchpad> section. Consider:
             - What are the key takeaways from the code analysis? 
@@ -202,7 +238,10 @@ def analyze(
     for output in final_review_stream:
         final_review += output
 
-    st.session_state.detailed_review = final_review
-    st.session_state.messages.append({"role": "assistant", "content": final_review, "type": "review"})
+    cleaned_final_review = remove_tags(final_review)
+
+
+    st.session_state.detailed_review = cleaned_final_review
+    st.session_state.messages.append({"role": "assistant", "content": cleaned_final_review, "type": "review"})
 
     print("Response Ended")
