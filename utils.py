@@ -28,7 +28,7 @@ def is_file_in_models_directory(file_name: str, models_directory: str = "models"
     return os.path.isfile(file_path)
 
 
-if is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf", "models"):
+if is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf", "models"):
     hf_hub_download(
         repo_id="VinayHajare/Meta-Llama-3-8B-Instruct-GGUF-v2",
         filename="Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf",
@@ -37,7 +37,7 @@ if is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf", "mod
 
 def get_context_by_model(model_name: str):
     model_context = {
-        "Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf": 8000,
+        "Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf": 8000,
         "codeqwen-1_5-7b-chat-q6_k.gguf": 65536,
         "Codestral-22B-v0.1-Q6_K.gguf": 32768,
         "AutoCoder-Q6_K.gguf": 16384
@@ -59,7 +59,7 @@ def get_message_formatter_type(model_name: str):
 
 
 @st.cache_data
-def load_model(model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf"):
+def load_model(model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf"):
     global llm
     global llm_model
     context = get_context_by_model(model)
@@ -94,7 +94,7 @@ def remove_tags(text):
 
 def analyze(
         message: str,
-        model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K-001.gguf",
+        model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf",
         system_message: str = "You are a helpful assistant.",
         max_tokens: int = 2048,
         temperature: float = 0.7,
