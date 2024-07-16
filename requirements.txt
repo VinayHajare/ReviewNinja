@@ -1,4 +1,4 @@
-llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+https://github.com/abetlen/llama-cpp-python/releases/download/v0.2.81-cu124/llama_cpp_python-0.2.81-cp310-cp310-linux_x86_64.whl
 huggingface_hub==0.23.4
 scikit-build-core
 llama-cpp-agent>=0.2.35
