@@ -28,7 +28,7 @@ def is_file_in_models_directory(file_name: str, models_directory: str = "models"
     return os.path.isfile(file_path)
 
 
-if is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf", "models"):
+if not is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf", "models"):
     hf_hub_download(
         repo_id="VinayHajare/Meta-Llama-3-8B-Instruct-GGUF-v2",
         filename="Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf",
@@ -56,6 +56,23 @@ def get_message_formatter_type(model_name: str):
         return MessagesFormatterType.AUTOCODER
     else:
         return MessagesFormatterType.MISTRAL
+
+
+def stream_text_word_by_word(text, delay=0.2):
+    """
+    Generator function to yield text word by word with a delay.
+
+    Args:
+        text (str): The text to stream.
+        delay (float): The delay between each word in seconds. Default is 0.2 seconds.
+
+    Yields:
+        str: The next word in the text.
+    """
+    words = text.split()
+    for word in words:
+        yield word + " "
+        time.sleep(delay)
 
 
 @st.cache_data
@@ -163,8 +180,9 @@ def analyze(
     # Clean the collected output
     cleaned_code_analysis = remove_tags(code_analysis)
 
-    # Stream the cleaned output
-    yield cleaned_code_analysis
+    # Stream the cleaned output word by word with a typing effect
+    for word in stream_text_word_by_word(cleaned_code_analysis):
+        yield word
 
     st.session_state.messages.append({"role": "assistant", "content": cleaned_code_analysis, "type": "analysis"})
     st.session_state.analysis_result = cleaned_code_analysis
