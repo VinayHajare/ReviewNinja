@@ -1,5 +1,5 @@
 import streamlit as st
-
+from utils import stream_text_word_by_word
 
 def display_chat(messages):
     for msg in messages:
@@ -21,7 +21,8 @@ def code_refactoring_tab():
     else:
         if st.button("Refactor :repeat:"):
             with st.chat_message("assistant", avatar="🥷"):
-                st.markdown(st.session_state.refactored_code)
+                st.write_stream(stream_text_word_by_word(st.session_state.refactored_code))
+                st.session_state.messages.append({"role": "assistant", "content": st.session_state.refactored_code, "type": "refactored"})
 
             st.success("Code refactored successfully.")
 

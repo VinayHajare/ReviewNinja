@@ -1,5 +1,5 @@
 import streamlit as st
-
+from utils import stream_text_word_by_word
 
 def display_chat(messages):
     for msg in messages:
@@ -21,7 +21,9 @@ def detailed_code_review_tab():
     else:
         if st.button("Review :mag_right:"):
             with st.chat_message("assistant", avatar="🥷"):
-                st.markdown(st.session_state.detailed_review)
+                st.write_stream(stream_text_word_by_word(st.session_state.detailed_review))
+                
+                st.session_state.messages.append({"role": "assistant", "content": st.session_state.detailed_review, "type": "review"})
 
             st.success("Code reviewed successfully.")
 

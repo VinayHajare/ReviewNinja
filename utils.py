@@ -221,9 +221,6 @@ def analyze(
         refactoring_suggestions += output
 
     cleaned_refactoring_suggestions = remove_tags(refactoring_suggestions)
-
-
-    st.session_state.messages.append({"role": "assistant", "content": cleaned_refactoring_suggestions, "type": "refactored"})
     st.session_state.refactored_code = cleaned_refactoring_suggestions
 
     agent.system_prompt = "You are the code review moderator"
@@ -257,9 +254,6 @@ def analyze(
         final_review += output
 
     cleaned_final_review = remove_tags(final_review)
-
-
     st.session_state.detailed_review = cleaned_final_review
-    st.session_state.messages.append({"role": "assistant", "content": cleaned_final_review, "type": "review"})
 
     print("Response Ended")
