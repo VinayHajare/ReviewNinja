@@ -4,7 +4,12 @@ from utils import analyze
 
 def display_chat(messages):
     for msg in messages:
-        st.chat_message(msg["role"], avatar="🥷" if msg["role"] == "assistant" else "👨🏻‍💻").markdown(msg["content"])
+        #st.chat_message(msg["role"], avatar="🥷" if msg["role"] == "assistant" else "👨🏻‍💻").markdown(msg["content"])
+        if msg["role"] == "assistant":
+            st.chat_message("🥷", avatar="🥷").markdown(msg["content"])
+        else:
+            st.chat_message("👨🏻‍💻", avatar="👨🏻‍💻").code(msg["content"])
+
 
 
 st.logo(image="img.png", icon_image="img.png")
