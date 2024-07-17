@@ -180,10 +180,10 @@ def analyze(
 
     # Clean the collected output
     cleaned_code_analysis = remove_tags(code_analysis)
-
+    yield cleaned_code_analysis
     # Stream the cleaned output word by word with a typing effect
-    for word in stream_text_word_by_word(cleaned_code_analysis):
-        yield word
+    #for word in stream_text_word_by_word(cleaned_code_analysis):
+    #   yield word
 
     st.session_state.messages.append({"role": "assistant", "content": cleaned_code_analysis, "type": "analysis"})
     st.session_state.analysis_result = cleaned_code_analysis
