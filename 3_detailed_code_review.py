@@ -7,7 +7,7 @@ def display_chat(messages):
 
 
 def review():
-    yield st.session_state.detailed_review
+    yield str(st.session_state.detailed_review)
 
 def detailed_code_review_tab():
     st.logo(image="img.png", icon_image="img.png")
