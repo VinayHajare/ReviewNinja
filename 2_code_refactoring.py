@@ -7,7 +7,7 @@ def display_chat(messages):
 
 
 def refactor():
-    yield = st.session_state.refactored_code
+    yield str(st.session_state.refactored_code)
 
 
 def code_refactoring_tab():
