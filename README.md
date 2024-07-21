@@ -33,6 +33,11 @@ Get a thorough review of your code, including suggestions for further improvemen
 2. **Proceed to Code Refactoring**: Use the analysis results to refactor your code automatically.
 3. **Finish with Detailed Code Review**: Get an in-depth review and further suggestions to improve your code.
 
+### Try Now 
+
+HuggingFace Space [Demo](https://huggingface.co/spaces/VinayHajare/ReviewNinja)  
+To use with GPU acceleration use this [notebook](https://colab.research.google.com/drive/1V1pOJNzEl6zR-dNyxAK4qN3xAs6Ui9e6?usp=sharing)  
+
 ---
 
 **ReviewNinja** is developed to assist developers and streamline the process of code reviews. For any questions or support, please contact us [here](http://www.vinayhajare.engineer).
