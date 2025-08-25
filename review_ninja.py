@@ -15,7 +15,7 @@ if "detailed_review" not in st.session_state:
 st.logo(image="img.png", icon_image="img.png")
 st.set_page_config(page_title="ReviewNinja", page_icon=":ninja:", layout="wide")
 with st.sidebar:
-    st.title("ReviewNinja :ninja:")
+    st.title("ReviewNinja 🥷🏻")
     st.caption("Streamlining Your Code Review Process")
 
 
@@ -32,3 +32,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
