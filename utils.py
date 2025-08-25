@@ -96,7 +96,7 @@ def load_model(model: str = "Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf"):
         llm = Llama(
             model_path=f"models/{model}",
             flash_attn=True,
-            n_gpu_layers=81,
+            n_gpu_layers=-1, # Use GPU
             n_batch=1024,
             n_ctx=context,
         )
@@ -258,3 +258,4 @@ def analyze(
     st.session_state.detailed_review = cleaned_final_review
 
     print("Response Ended")
+
