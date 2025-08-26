@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.logo(image="img.png", icon_image="img.png")
-st.title("Welcome to ReviewNinja :ninja:")
+st.title("Welcome to ReviewNinja 🥷🏻")
 st.subheader("Streamlining Your Code Review Process")
 st.markdown("""
     **ReviewNinja** is a tool designed to help developers improve their code through comprehensive analysis, refactoring, and detailed review.
@@ -56,4 +56,5 @@ st.markdown("""
 st.markdown("---")
 st.markdown("""
     **ReviewNinja** is developed to assist developers and streamline the process of code reviews. For any questions or support, please contact us [here](http://www.vinayhajare.engineer).
+
     """)
