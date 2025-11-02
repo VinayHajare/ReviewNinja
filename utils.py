@@ -36,6 +36,27 @@ if not is_file_in_models_directory("Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf", "mod
         local_dir="./models"
     )
 
+if not is_file_in_models_directory("codeqwen-1_5-7b-chat-q6_k.gguf", "models"):
+    hf_hub_download(
+        repo_id="Qwen/CodeQwen1.5-7B-Chat-GGUF",
+        filename="codeqwen-1_5-7b-chat-q6_k.gguf",
+        local_dir = "./models"
+    )
+
+if not is_file_in_models_directory("Codestral-22B-v0.1-Q6_K.gguf", "models"):
+    hf_hub_download(
+        repo_id="bartowski/Codestral-22B-v0.1-GGUF",
+        filename="Codestral-22B-v0.1-Q6_K.gguf",
+        local_dir = "./models"
+    )
+    
+if not is_file_in_models_directory("AutoCoder-Q6_K.gguf", "models"):
+    hf_hub_download(
+        repo_id="bartowski/AutoCoder-GGUF",
+        filename="AutoCoder-Q6_K.gguf",
+        local_dir = "./models"
+    )
+
 def get_context_by_model(model_name: str):
     model_context = {
         "Meta-Llama-3-8B-Instruct-v2.Q6_K.gguf": 8000,
@@ -258,4 +279,5 @@ def analyze(
     st.session_state.detailed_review = cleaned_final_review
 
     print("Response Ended")
+
 
