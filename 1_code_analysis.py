@@ -27,6 +27,7 @@ if codeInput := st.chat_input("Enter your code here:", key="codeInput"):
     st.chat_message("user", avatar="👨🏻‍💻").code(codeInput)
     st.session_state.messages.append({"role": "user", "content": codeInput, "type": "prompt"})
     with st.chat_message("assistant", avatar="🥷"):
-        st.write_stream(analyze(codeInput))
+        st.write_stream(analyze(codeInput, model=st.session_state.selected_model))
 
     st.success("Code analyzed successfully.")
+
